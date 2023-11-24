@@ -89,7 +89,7 @@ export default function Command() {
         <Form.Dropdown.Item value="leicht" title="Leicht" icon="🌱" />
         <Form.Dropdown.Item value="routine" title="Routine" icon="🔄" />
         <Form.Dropdown.Item value="deep" title="Deep" icon="🤔" />
-        <Form.Dropdown.Item value="austausch" title="Austausch" icon="💬" />
+        <Form.Dropdown.Item value="sozial" title="Sozial" icon="💬" />
         <Form.Dropdown.Item value="warten" title="Warten" icon="⏳" />
       </Form.Dropdown>
     </Form>
