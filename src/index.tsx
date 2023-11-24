@@ -5,17 +5,27 @@ import { useState } from "react";
 
 type Values = {
   textfield: string;
+  areaDropdown: string;
   dropdown: string;
   contextDropdown: string;
 };
 
 export default function Command() {
   const [textField, setTextField] = useState('');
+  const [areaDropdown, setAreaDropdown] = useState<string>('');
   const [dropdown, setDropdown] = useState<string>('');
   const [contextDropdown, setContextDropdown] = useState<string>('');
 
   async function handleSubmit(values: Values) {
-    const todoPath = join("/Users/martinbetz/Notes/Todos", "todo.txt");
+    const basePath = "/Users/martinbetz/Notes/Todos/";
+
+    const areaFilePaths: Record<string, string> = {
+      pool: "pool.txt",
+      todo: "todo.txt",
+      work: "work.txt",
+    };
+
+    const todoPath = join(basePath, areaFilePaths[values.areaDropdown]);
 
     const todoItem = `(${values.dropdown}) ${values.textfield} @${values.contextDropdown}`;
 
@@ -47,6 +57,17 @@ export default function Command() {
         value={textField}
         onChange={(text) => setTextField(text)}
       />
+      <Form.Dropdown
+        id="areaDropdown"
+        title="Area"
+        value={areaDropdown}
+        onChange={(value) => setAreaDropdown(value)}
+      >
+        <Form.Dropdown.Item value="pool" title="Pool" icon="🏊‍♂️" />
+        <Form.Dropdown.Item value="todo" title="Todo" icon="📝" />
+        <Form.Dropdown.Item value="work" title="Work" icon="💼" />
+        {/* Add more areas here... */}
+      </Form.Dropdown>
       <Form.Dropdown
         id="dropdown"
         title="Priority"
