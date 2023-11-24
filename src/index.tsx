@@ -5,19 +5,19 @@ import { useState } from "react";
 
 type Values = {
   textfield: string;
-  tokeneditor: string[];
+  dropdown: string;
 };
 
 export default function Command() {
   const [textField, setTextField] = useState('');
-  const [tokenEditor, setTokenEditor] = useState<string[]>([]);
+  const [dropdown, setDropdown] = useState<string>(''); // New state for dropdown
 
   async function handleSubmit(values: Values) {
     const todoPath = join("/Users/martinbetz/Notes/Todos", "todo.txt");
-    
+
     const todoItem =
-      values.tokeneditor && values.tokeneditor[0]
-        ? "(" + values.tokeneditor[0] + ") " + values.textfield
+      values.dropdown // Using dropdown value
+        ? "(" + values.dropdown + ") " + values.textfield
         : values.textfield;
 
     await fs.appendFile(todoPath, todoItem + "\n");
@@ -28,7 +28,7 @@ export default function Command() {
 
     // Clear the fields by updating the state
     setTextField('');
-    setTokenEditor([]);
+    setDropdown('');
   }
 
   return (
@@ -47,17 +47,17 @@ export default function Command() {
         value={textField}
         onChange={(text) => setTextField(text)}
       />
-      <Form.TagPicker
-        id="tokeneditor"
-        title="Priority"
-        values={tokenEditor}
-        onChange={(tokens) => setTokenEditor(tokens)}
+      <Form.Dropdown // Replace Form.TagPicker with Form.Dropdown
+        id="dropdown"
+        title="Priority" // Modify the title as needed
+        value={dropdown}
+        onChange={(value) => setDropdown(value)}
       >
-        <Form.TagPicker.Item value="A" title="A" />
-        <Form.TagPicker.Item value="B" title="B" />
-        <Form.TagPicker.Item value="C" title="C" />
-        <Form.TagPicker.Item value="D" title="D" />
-      </Form.TagPicker>
+        <Form.Dropdown.Item value="D" title="D" icon="🟢" />
+        <Form.Dropdown.Item value="C" title="C" icon="🟡" />
+        <Form.Dropdown.Item value="B" title="B" icon="🟠" />
+        <Form.Dropdown.Item value="A" title="A" icon="🔴" />
+      </Form.Dropdown>
     </Form>
   );
 }
