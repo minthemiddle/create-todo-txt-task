@@ -9,11 +9,22 @@ type Values = {
 };
 
 export default function Command() {
- async function handleSubmit(values: Values) {
-   const todoPath = join("/Users/martinbetz/Notes/Todos", "todo.txt");
-   await fs.appendFile(todoPath, values.textfield + "\n");
-   showToast({ title: "Added todo", message: "Added todo. See logs for submitted values" });
- }
+  async function handleSubmit(values: Values) {
+    const todoPath = join("/Users/martinbetz/Notes/Todos", "todo.txt");
+    
+    // Check if tokeneditor has a value, otherwise, use only values.textfield
+    const todoItem =
+      values.tokeneditor && values.tokeneditor[0]
+        ? "(" + values.tokeneditor[0] + ") " + values.textfield
+        : values.textfield;
+
+    await fs.appendFile(todoPath, todoItem + "\n");
+    showToast({
+      title: "Added todo",
+      message: "Added todo. See logs for submitted values",
+    });
+  }
+
 
   return (
     <Form
