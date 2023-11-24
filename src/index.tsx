@@ -35,8 +35,8 @@ export default function Command() {
       message: "Added todo. See logs for submitted values",
     });
 
-    // Clear the fields by updating the states
     setTextField('');
+    setAreaDropdown('');
     setDropdown('');
     setContextDropdown('');
   }
@@ -79,7 +79,7 @@ export default function Command() {
         <Form.Dropdown.Item value="B" title="B" icon="🟠" />
         <Form.Dropdown.Item value="A" title="A" icon="🔴" />
       </Form.Dropdown>
-      <Form.Dropdown // Additional dropdown for context
+      <Form.Dropdown
         id="contextDropdown"
         title="Context"
         value={contextDropdown}
