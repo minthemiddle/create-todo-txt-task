@@ -28,6 +28,8 @@ export default function Command() {
       <Form.TagPicker id="tokeneditor" title="Priority">
         <Form.TagPicker.Item value="A" title="A" />
         <Form.TagPicker.Item value="B" title="B" />
+        <Form.TagPicker.Item value="C" title="C" />
+        <Form.TagPicker.Item value="D" title="D" />
       </Form.TagPicker>
     </Form>
   );
