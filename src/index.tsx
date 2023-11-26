@@ -77,7 +77,9 @@ export default function Command() {
 
     const todoPath = join(basePath, areaFilePaths[values.areaDropdown]);
 
-    const todoItem = `(${values.dropdown}) ${values.textfield} @${values.contextDropdown} ${values.projectDropdown ? `+${values.projectDropdown}` : ''}`;
+    const todoItem = values.projectDropdown === "" 
+    ? `(${values.dropdown}) ${values.textfield} @${values.contextDropdown}` 
+    : `(${values.dropdown}) ${values.textfield} @${values.contextDropdown} +${values.projectDropdown}`;
 
     await fs.appendFile(todoPath, todoItem + "\n");
     showToast({
@@ -147,8 +149,10 @@ export default function Command() {
         id="projectDropdown"
         title="Project"
         value={projectDropdown}
+        defaultValue=""
         onChange={(value) => setProjectDropdown(value)}
       >
+        <Form.Dropdown.Item key="none" value="" title="None" icon="❌" />
         {projects.map((project, index) => (
           <Form.Dropdown.Item key={index} value={project} title={project} icon="📂" />
         ))}
