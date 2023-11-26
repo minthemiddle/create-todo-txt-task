@@ -1,13 +1,15 @@
 import { Form, ActionPanel, Action, showToast } from "@raycast/api";
-import { promises as fs } from "fs";
+import { promises as fs, readdir, readFile } from "fs";
 import { join } from "path";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { readdir, readFile } from "fs/promises";
 
 type Values = {
   textfield: string;
   areaDropdown: string;
   dropdown: string;
   contextDropdown: string;
+  projectDropdown: string;
 };
 
 export default function Command() {
@@ -15,6 +17,54 @@ export default function Command() {
   const [areaDropdown, setAreaDropdown] = useState<string>('');
   const [dropdown, setDropdown] = useState<string>('');
   const [contextDropdown, setContextDropdown] = useState<string>('');
+  const [projectDropdown, setProjectDropdown] = useState<string>('');
+  const [projects, setProjects] = useState<string[]>([]);
+
+  useEffect(() => {
+  async function fetchProjects() {
+  try {
+    const basePath = "/Users/martinbetz/Notes/Todos/";
+    const files = await readdir(basePath, { withFileTypes: true });
+
+    const projectNames: string[] = [];
+    for (const file of files) {
+      if (file.isFile()) {
+        const filePath = join(basePath, file.name);
+        const fileContent = await readFile(filePath, "utf-8");
+
+        const lines = fileContent.split("\n");
+
+        lines.forEach((line) => {
+          const matches = line.match(/\+(\w+)/g); // Updated regex pattern to capture alphanumeric characters and common symbols
+          if (matches) {
+            matches.forEach((match) => {
+              try {
+                const projectName = match.substring(1); // Remove the '+' symbol
+                if (!projectNames.includes(projectName)) {
+                  projectNames.push(projectName);
+                }
+              } catch (error) {
+                console.error("Error parsing project name:", error);
+              }
+            });
+          }
+        });
+      }
+    }
+
+    setProjects(projectNames);
+  } catch (error) {
+    console.error("Error fetching projects:", error);
+  }
+}
+
+
+
+
+
+
+    fetchProjects();
+  }, []);
 
   async function handleSubmit(values: Values) {
     const basePath = "/Users/martinbetz/Notes/Todos/";
@@ -27,7 +77,7 @@ export default function Command() {
 
     const todoPath = join(basePath, areaFilePaths[values.areaDropdown]);
 
-    const todoItem = `(${values.dropdown}) ${values.textfield} @${values.contextDropdown}`;
+    const todoItem = `(${values.dropdown}) ${values.textfield} @${values.contextDropdown} ${values.projectDropdown ? `+${values.projectDropdown}` : ''}`;
 
     await fs.appendFile(todoPath, todoItem + "\n");
     showToast({
@@ -39,6 +89,7 @@ export default function Command() {
     setAreaDropdown('');
     setDropdown('');
     setContextDropdown('');
+    setProjectDropdown('');
   }
 
   return (
@@ -91,6 +142,16 @@ export default function Command() {
         <Form.Dropdown.Item value="deep" title="Deep" icon="🤔" />
         <Form.Dropdown.Item value="sozial" title="Sozial" icon="💬" />
         <Form.Dropdown.Item value="warten" title="Warten" icon="⏳" />
+      </Form.Dropdown>
+      <Form.Dropdown
+        id="projectDropdown"
+        title="Project"
+        value={projectDropdown}
+        onChange={(value) => setProjectDropdown(value)}
+      >
+        {projects.map((project, index) => (
+          <Form.Dropdown.Item key={index} value={project} title={project} icon="📂" />
+        ))}
       </Form.Dropdown>
     </Form>
   );
