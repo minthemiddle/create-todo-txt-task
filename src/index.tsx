@@ -138,6 +138,7 @@ export default function Command() {
         value={contextDropdown}
         onChange={(value) => setContextDropdown(value)}
       >
+        <Form.Dropdown.Item value="neu" title="Neu" icon="🌟" />
         <Form.Dropdown.Item value="kurz" title="Kurz" icon="💨" />
         <Form.Dropdown.Item value="leicht" title="Leicht" icon="🌱" />
         <Form.Dropdown.Item value="routine" title="Routine" icon="🔄" />
