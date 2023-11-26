@@ -35,7 +35,7 @@ export default function Command() {
         const lines = fileContent.split("\n");
 
         lines.forEach((line) => {
-          const matches = line.match(/\+(\w+)/g); // Updated regex pattern to capture alphanumeric characters and common symbols
+          const matches = line.match(/\+([\p{L}\d_-]+)/gu);
           if (matches) {
             matches.forEach((match) => {
               try {
